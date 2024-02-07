@@ -21,6 +21,7 @@ client.once('ready', () => {
     },
     featuresDir: path.join(process.cwd(), 'src', 'features'),
     commandsDir: path.join(process.cwd(), 'src', 'commands'),
+    testServers: ['1204545674075701268']
   })
 })
 

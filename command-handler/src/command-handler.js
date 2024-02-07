@@ -41,6 +41,10 @@ export default class CommandHandler {
       const filePath = pathToFileURL(command)
       const commandObject = (await import(filePath)).default
 
+      if (!commandObject) {
+        continue
+      }
+
       this._commands.set(commandName, commandObject)
 
       const { aliases = [] } = commandObject
