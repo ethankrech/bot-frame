@@ -12,13 +12,15 @@ const client = new Client({
 })
 
 client.once('ready', () => {
-  console.log('The bot is ready!')
+  console.log('The bot is ready')
 
   new CH({
     client,
     events: {
       dir: path.join(process.cwd(), 'src', 'events'),
     },
+    featuresDir: path.join(process.cwd(), 'src', 'features'),
+    commandsDir: path.join(process.cwd(), 'src', 'commands'),
   })
 })
 

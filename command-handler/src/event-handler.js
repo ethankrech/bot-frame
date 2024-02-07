@@ -20,9 +20,16 @@ export default class EventHandler {
   }
 
   async loadListeners(dir) {
-    const folders = getFiles(dir, true)
+    const botEvents = getFiles(dir, true)
 
-    for (const folder of folders) {
+    const currentFilePath = url.fileURLToPath(import.meta.url)
+    const currentFileDir = path.dirname(currentFilePath)
+
+    const builtInEvents = getFiles(path.join(currentFileDir, 'events'), true)
+
+    const events = [...botEvents, ...builtInEvents]
+
+    for (const folder of events) {
       const event = path.basename(folder)
       const files = getFiles(folder)
 
