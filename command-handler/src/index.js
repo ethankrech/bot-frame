@@ -1,6 +1,6 @@
 import EventHandler from './event-handler.js'
 import FeatureHandler from './feature-handler.js'
-import CmdHandler from './command-handler.js'
+import CmdHandler from './cmd-handler/command-handler.js'
 
 export default class CommandHandler {
   constructor({ client, events, featuresDir, commandsDir, testServers = [] }) {
@@ -15,12 +15,12 @@ export default class CommandHandler {
     if (featuresDir) {
       new FeatureHandler(client, this, featuresDir)
     }
+    
+    this._testServers = testServers
 
     if (commandsDir) {
-      this._commandHandler = new CmdHandler(commandsDir)
+      this._commandHandler = new CmdHandler(commandsDir, client, this)
     }
-
-    this._testServers = testServers
   }
 
   get commandHandler() {

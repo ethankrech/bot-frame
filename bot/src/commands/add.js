@@ -1,4 +1,8 @@
+import CommandTypes from 'command-handler/src/cmd-handler/command-types.js'
+
 export default {
+    type: CommandTypes.Legacy,
+
     run: ({ message, text, args }) => {
         let sum = 0
 

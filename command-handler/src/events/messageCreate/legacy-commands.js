@@ -2,7 +2,6 @@ export default (message, handler) => {
   const { commandHandler } = handler
   const { prefix, commands } = commandHandler
   const { content, author } = message
-  console.log("H")
 
   if (author.bot || !content.startsWith(prefix)) {
     return
