@@ -18,22 +18,24 @@ export default {
             message.channel.sendTyping() 
         }, 5000);
 
-        const messages = (await message.channel.messages.fetch({ limit: 25 })).reverse()
+        const messages = (await message.channel.messages.fetch({ limit: 50 })).reverse()
 
         const gptMessages = []
         const maxTokens = 2500 
         let totalTokens = 0
 
         messages.forEach((msg) => {
-            const tokens = countTokens(msg.content)
+            if (message.content.startsWith('!')) {
+                const tokens = countTokens(msg.content)
 
-            if (totalTokens + tokens < maxTokens) {
-                totalTokens += tokens
-
-                gptMessages.push({
-                    role: msg.author.bot ? 'assistant' : 'user',
-                    content: msg.content
-                })
+                if (totalTokens + tokens < maxTokens) {
+                    totalTokens += tokens
+    
+                    gptMessages.push({
+                        role: msg.author.bot ? 'assistant' : 'user',
+                        content: msg.content
+                    })
+                }
             }
         })
 
