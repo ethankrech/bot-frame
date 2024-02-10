@@ -33,6 +33,8 @@ export default class CommandHandler {
   }
 
   async setUp(commandsDir, handler) {
+    const registeredCommands = []
+
     const botCommands = getFiles(commandsDir)
 
     const currentFilePath = fileURLToPath(import.meta.url)
@@ -53,9 +55,32 @@ export default class CommandHandler {
         continue
       }
 
-      const { aliases = [], type, test, description, options = [] } = commandObject
+      const {
+        aliases = [],
+        type = commandTypes.Legacy,
+        test,
+        description,
+        options = [],
+        delete: del,
+      } = commandObject
 
-      if (type === commandTypes.Legacy || type === commandTypes.Both) {
+      const isLegacy = type === commandTypes.Legacy || type === commandTypes.Both
+      const isSlash = type === commandTypes.Slash || type === commandTypes.Both
+
+      if (del) {
+        if (isSlash) {
+          for (const guildId of handler.testServers) {
+            this.slashCommands.delete(commandName, guildId)
+          }
+
+          this.slashCommands.delete(commandName)
+        }
+        continue
+      }
+
+      registeredCommands.push(commandName)
+
+      if (isLegacy) {
         this._commands.set(commandName, commandObject)
 
         for (const alias of aliases) {
@@ -63,7 +88,7 @@ export default class CommandHandler {
         }
       }
 
-      if (type === commandTypes.Slash || type === commandTypes.Both) {
+      if (isSlash) {
         if (test) {
           for (const guildId of handler.testServers) {
             this.slashCommands.create(commandName, description, options, guildId)
@@ -71,6 +96,31 @@ export default class CommandHandler {
         } else {
           this.slashCommands.create(commandName, description, options)
         }
+      }
+    }
+
+    this.deleteRemovedCommands(registeredCommands, handler)
+  }
+
+  async deleteRemovedCommands(registeredCommands, handler) {
+    const { cache: globalCommands } = await this.slashCommands.getCommands()
+    const missingGlobalCommands = globalCommands
+      .map(({ name }) => name)
+      .filter((name) => !registeredCommands.includes(name))
+    for (const name of missingGlobalCommands) {
+      await this.slashCommands.delete(name)
+    }
+
+    for (const guildId of handler.testServers) {
+      const { cache: guildCommands } = await this.slashCommands.getCommands(
+        guildId
+      )
+      const missingGuildCommands = guildCommands
+        .map(({ name }) => name)
+        .filter((name) => !registeredCommands.includes(name))
+
+      for (const name of missingGuildCommands) {
+        await this.slashCommands.delete(name, guildId)
       }
     }
   }
