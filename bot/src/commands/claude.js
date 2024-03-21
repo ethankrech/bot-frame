@@ -18,7 +18,7 @@ export default {
         const messages = (await message.channel.messages.fetch({ limit: 50 })).reverse()
         
         const claudeMessages = []
-        const maxTokens = 2000
+        const maxTokens = 2500
         let totalTokens = 0
 
         
@@ -46,6 +46,8 @@ export default {
             
 
         })
+
+        clearInterval(sendTypingInterval)
 
         if (!claudeMessage) {
             clearInterval()

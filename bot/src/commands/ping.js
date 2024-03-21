@@ -4,8 +4,6 @@ export default {
     description: 'Responds with pong!',
     type: commandTypes.Legacy,
 
-    delete: true,
-
     run: ({ message }) => {
         message.reply('pong!')
     }
