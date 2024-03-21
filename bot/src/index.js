@@ -8,6 +8,9 @@ const client = new Client({
     IntentsBitField.Flags.Guilds,
     IntentsBitField.Flags.MessageContent,
     IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildModeration,
+    IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.GuildMessageTyping,
   ],
 })
 
@@ -21,7 +24,7 @@ client.once('ready', () => {
     },
     featuresDir: path.join(process.cwd(), 'src', 'features'),
     commandsDir: path.join(process.cwd(), 'src', 'commands'),
-    testServers: ['1204545674075701268']
+    testServers: []
   })
 })
 

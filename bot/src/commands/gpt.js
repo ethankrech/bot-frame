@@ -1,5 +1,4 @@
 import { OpenAI } from 'openai'
-import commandTypes from 'command-handler/src/cmd-handler/command-types.js'
 import countTokens from 'command-handler/src/util/count-tokens.js'
 import { ChannelType, ApplicationCommandOptionType } from 'discord.js'
 
@@ -9,9 +8,9 @@ const openai = new OpenAI({
 
 export default {
     description: 'Talk to ChatGPT',
-    type: commandTypes.Legacy,
+   // type: commandTypes.Legacy,
 
-    delete: true,
+    //delete: true,
 
     run: async ({ message, text, args }) => {
         await message.channel.sendTyping() 

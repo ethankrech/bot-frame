@@ -5,7 +5,7 @@ export default {
     description: 'Make a new chat',
     type: commandTypes.Legacy,
 
-  delete: true,
+  //delete: true,
 
     run: async ({ message, text, args }) => {
         const thread = await message.channel.threads.create({
@@ -15,6 +15,7 @@ export default {
         })
 
         await thread.members.add(message.author.id)
+        
         message.delete()
     }
 }
